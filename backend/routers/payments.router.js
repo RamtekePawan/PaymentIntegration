@@ -1,5 +1,7 @@
 import express from "express";
 import Razorpay from "razorpay";
+import "dotenv/config";
+import crypto from "crypto";
 
 const router = express.Router();
 
@@ -32,7 +34,7 @@ router.post("/order", (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error!" });
-    console.log(error);
+    console.log("error /order ::::>", error);
   }
 });
 

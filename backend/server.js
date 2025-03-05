@@ -14,12 +14,24 @@ const port = process.env.SERVER_PORT || 4000;
 app.use(express.json());
 app.use(cors());
 
+console.log("RAZORPAY_KEY_ID", process.env.RAZORPAY_KEY_ID);
+console.log("RAZORPAY_SECRET", process.env.RAZORPAY_SECRET);
+
 //* Available Route
 app.get("/", (req, res) => {
   res.send("Razorpay Payment Gateway Using React And Node Js ");
 });
 
-app.use("/api/payment",  router);
+if (!process.env.RAZORPAY_KEY_ID) {
+  console.log(process.env.RAZORPAY_KEY_ID);
+  throw new Error("RAZORPAY_KEY_ID is null");
+}
+if (!process.env.RAZORPAY_SECRET) {
+  console.log(process.env.RAZORPAY_SECRET);
+  throw new Error("RAZORPAY_SECRET is null");
+}
+
+app.use("/api/payment", router);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
