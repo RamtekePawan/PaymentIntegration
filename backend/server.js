@@ -1,8 +1,7 @@
 import connectToMongo from "./database/db.config.js";
 import express, { Router } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import paymentsRouter from "./routers/payments.router.js";
+import dotenv from "dotenv"; 
 import router from "./routers/payments.router.js";
 dotenv.config(); // This is how you load the .env file
 
@@ -14,20 +13,15 @@ const port = process.env.SERVER_PORT || 4000;
 app.use(express.json());
 app.use(cors());
 
-console.log("RAZORPAY_KEY_ID", process.env.RAZORPAY_KEY_ID);
-console.log("RAZORPAY_SECRET", process.env.RAZORPAY_SECRET);
-
-//* Available Route
+// Available Route
 app.get("/", (req, res) => {
   res.send("Razorpay Payment Gateway Using React And Node Js ");
 });
 
-if (!process.env.RAZORPAY_KEY_ID) {
-  console.log(process.env.RAZORPAY_KEY_ID);
+if (!process.env.RAZORPAY_KEY_ID) { 
   throw new Error("RAZORPAY_KEY_ID is null");
 }
-if (!process.env.RAZORPAY_SECRET) {
-  console.log(process.env.RAZORPAY_SECRET);
+if (!process.env.RAZORPAY_SECRET) { 
   throw new Error("RAZORPAY_SECRET is null");
 }
 

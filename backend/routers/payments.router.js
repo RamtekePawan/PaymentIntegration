@@ -2,6 +2,7 @@ import express from "express";
 import Razorpay from "razorpay";
 import "dotenv/config";
 import crypto from "crypto";
+import Payment from "../models/payment.model.js";
 
 const router = express.Router();
 
@@ -35,6 +36,52 @@ router.post("/order", (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error!" });
     console.log("error /order ::::>", error);
+  }
+});
+
+router.post("/verify", async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
+
+  console.log(
+    "INSIDE /verify  razorpay_order_id, razorpay_payment_id, razorpay_signature",
+    req.body
+  );
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.RAZORPAY_SECRET)
+      .update(sign.toString())
+      .digest("hex");
+
+    console.log(
+      "INSIDE /verify expectedSign , razorpay_signature",
+      expectedSign,
+      razorpay_signature
+    );
+    const isAuthentic = expectedSign === razorpay_signature;
+
+    if (isAuthentic) {
+      const payment = new Payment({
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      });
+      let dbRespo = await payment.save();
+
+      console.log("dbRespo:::::::>>>>", dbRespo);
+      // Send Message
+      res.status(200).json({
+        message: "Payement Successfully",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error!" });
+    console.log("Error in /verify ::::>", error);
   }
 });
 

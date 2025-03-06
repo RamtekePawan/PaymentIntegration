@@ -1,6 +1,6 @@
 import mongoose, { model } from "mongoose";
 
-const { Schema } = "mongoose";
+const { Schema } = mongoose;
 
 const PaymentSchema = new Schema({
   razorpay_order_id: {
