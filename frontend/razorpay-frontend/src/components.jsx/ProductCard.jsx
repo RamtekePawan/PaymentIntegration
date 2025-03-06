@@ -6,7 +6,6 @@ import {
   CardHeader,
   Typography,
 } from "@material-tailwind/react";
-import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function ProductCard() {
@@ -78,8 +77,7 @@ export default function ProductCard() {
     rzp1.open();
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const [amount, setAmount] = useState(350);
+  const amount = 350;
   const handlePayment = async () => {
     try {
       const response = await fetch(
